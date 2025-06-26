@@ -24,22 +24,54 @@
     }
 
     // Array para mapear los nombres de los estados en la base de datos a los nombres en el GeoJSON
+   // Mapeo completo de nombres de estados
     $estados_mapping = [
         'Veracruz de Ignacio de la Llave' => 'Veracruz',
+        'Veracruz' => 'Veracruz',
         'Michoacán de Ocampo' => 'Michoacán',
+        'Michoacán' => 'Michoacán',
         'Ciudad de México' => 'Ciudad de México',
+        'Distrito Federal' => 'Ciudad de México',
+        'DF' => 'Ciudad de México',
+        'D.F.' => 'Ciudad de México',
         'Coahuila de Zaragoza' => 'Coahuila',
+        'Coahuila' => 'Coahuila',
         'Estado de México' => 'México',
-        // Añade aquí más mapeos si es necesario
+        'México' => 'México',
+        'Edomex' => 'México',
+        'Nuevo León' => 'Nuevo León',
+        'San Luis Potosí' => 'San Luis Potosí',
+        'Querétaro' => 'Querétaro',
+        'Yucatán' => 'Yucatán',
+        'Mérida' => 'Yucatán',
+        // Añadir todos los estados con sus variantes
     ];
 
-    // Función para normalizar nombres de estados
+        // Función para normalizar nombres de estados
     function normalizar_estado($nombre) {
         global $estados_mapping;
+        
+        // Limpiar el nombre
+        $nombre = trim($nombre);
+        $nombre = mb_convert_case($nombre, MB_CASE_TITLE, "UTF-8");
+        
+        // 1. Buscar coincidencia exacta
         if (isset($estados_mapping[$nombre])) {
             return $estados_mapping[$nombre];
         }
-        return $nombre;
+        
+        // 2. Buscar sin acentos ni caracteres especiales
+        $nombre_simple = preg_replace('/[^a-zA-Z0-9]/u', '', $nombre);
+        foreach ($estados_mapping as $key => $value) {
+            $key_simple = preg_replace('/[^a-zA-Z0-9]/u', '', $key);
+            if (strcasecmp($nombre_simple, $key_simple) === 0) {
+                return $value;
+            }
+        }
+        
+        // 3. Si no se encuentra, registrar el error
+        error_log("No se pudo normalizar el nombre de estado: " . $nombre);
+        return $nombre; // Devolver el original como último recurso
     }
 
     // Obtener datos de prevalencia delictiva general

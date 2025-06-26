@@ -7,67 +7,91 @@ function obtener_datos_poblacion() {
 
     $conn_poblacion = new mysqli($servername, $username, $password, $database);
     
-    
-    // Verificar conexión
     if ($conn_poblacion->connect_error) {
         die("Error de conexión (población): " . $conn_poblacion->connect_error);
     }
     
-    // Consulta para obtener población por entidad
+    // Inicializar todos los estados con valores por defecto
+    $estados_poblacion = array();
+    foreach ($estados_nombres as $clave => $datos) {
+        $estados_poblacion[$clave] = array(
+            "id" => $datos['id'],
+            "nombre" => $datos['nombre'],
+            "poblacion_total" => 0,
+            "poblacion_masculina" => 0,
+            "poblacion_femenina" => 0,
+            "peso_poblacion" => 0
+        );
+    }
+    
+    // Consulta SQL para obtener datos reales
+    // Consulta SQL corregida - solo tomar los totales de entidad
     $sql_poblacion = "SELECT 
                         entidad,
                         entidad_nombre,
-                        SUM(poblacion_total) AS poblacion_total,
-                        SUM(poblacion_masculina) AS poblacion_masculina,
-                        SUM(poblacion_femenina) AS poblacion_femenina
+                        poblacion_total,
+                        poblacion_masculina,
+                        poblacion_femenina
                       FROM 
                         poblacion_inegi_reducida
                       WHERE
-                        entidad > 0
-                      GROUP BY 
-                        entidad, entidad_nombre
+                        entidad > 0 
+                        AND municipio = 0 
+                        AND localidad = 0
                       ORDER BY 
-                        poblacion_total DESC";
-    
+                        entidad";
+        
     $result_poblacion = $conn_poblacion->query($sql_poblacion);
     
-    // Procesar datos de población
-    $estados_poblacion = array();
     if ($result_poblacion->num_rows > 0) {
         while($row = $result_poblacion->fetch_assoc()) {
-            $entidad_nombre = $row["entidad_nombre"];
-            $clave_estado = null;
+            $nombre_estado = trim($row["entidad_nombre"]);
             
-            // Encontrar la clave del estado desde el nombre
+            // COMENTADO: Debug: Ver qué nombres vienen de la BD
+            // echo "Procesando: " . $nombre_estado . "<br>";
+            
+            // Buscar directamente por clave si coincide
+            $clave_encontrada = null;
+            
+            // Primero buscar coincidencia exacta en nombres
             foreach ($estados_nombres as $clave => $datos) {
-                if (strtoupper($datos['nombre']) == strtoupper($entidad_nombre)) {
-                    $clave_estado = $clave;
+                if (strtoupper($datos['nombre']) == strtoupper($nombre_estado)) {
+                    $clave_encontrada = $clave;
                     break;
                 }
             }
             
-            if ($clave_estado) {
-                $estados_poblacion[$clave_estado] = array(
-                    "id" => $estados_nombres[$clave_estado]['id'],
-                    "nombre" => $entidad_nombre,
+            // Si no encuentra coincidencia exacta, usar normalización
+            if (!$clave_encontrada) {
+                $clave_normalizada = normalizar_nombre_estado($nombre_estado);
+                if (isset($estados_nombres[$clave_normalizada])) {
+                    $clave_encontrada = $clave_normalizada;
+                }
+            }
+            
+            // Asignar datos si encontró la clave
+            if ($clave_encontrada) {
+                $estados_poblacion[$clave_encontrada] = array(
+                    "id" => $estados_nombres[$clave_encontrada]['id'],
+                    "nombre" => $estados_nombres[$clave_encontrada]['nombre'],
                     "poblacion_total" => $row["poblacion_total"],
                     "poblacion_masculina" => $row["poblacion_masculina"],
-                    "poblacion_femenina" => $row["poblacion_femenina"]
+                    "poblacion_femenina" => $row["poblacion_femenina"],
+                    "peso_poblacion" => 0
                 );
+                // COMENTADO: echo "✓ Asignado a: " . $clave_encontrada . " - Población: " . number_format($row["poblacion_total"]) . "<br>";
+            } else {
+                // COMENTADO: echo "✗ No se pudo mapear: " . $nombre_estado . "<br>";
             }
         }
     }
     
-    // Calcular peso poblacional (directamente proporcional a la población)
-    if (!empty($estados_poblacion)) {
-        $max_poblacion = max(array_column($estados_poblacion, "poblacion_total"));
-        foreach ($estados_poblacion as $estado => $datos) {
-            $peso_poblacion = ($datos["poblacion_total"] / $max_poblacion) * 100;
-            $estados_poblacion[$estado]["peso_poblacion"] = $peso_poblacion;
-        }
+    // Calcular peso poblacional
+    $max_poblacion = max(array_column($estados_poblacion, "poblacion_total")) ?: 1;
+    foreach ($estados_poblacion as $clave => &$datos) {
+        $datos["peso_poblacion"] = ($datos["poblacion_total"] / $max_poblacion) * 100;
     }
     
-    // Cerrar conexión
     $conn_poblacion->close();
     
     return $estados_poblacion;

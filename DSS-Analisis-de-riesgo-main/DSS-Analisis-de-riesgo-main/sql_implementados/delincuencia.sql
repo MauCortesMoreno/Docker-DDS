@@ -1,0 +1,163 @@
+-- Tabla: IncidenciaDelictiva
+CREATE TABLE IncidenciaDelictiva (
+    id INT AUTO_INCREMENT PRIMARY KEY,
+    entidad VARCHAR(100) NOT NULL,
+    tasa_2023 INT NOT NULL
+);
+
+INSERT INTO IncidenciaDelictiva (id, entidad, tasa_2023) VALUES
+(1,'Aguascalientes',45262),
+(2,'Baja California',31198),
+(3,'Baja California Sur',25661),
+(4,'Campeche',31793),
+(5,'Coahuila de Zaragoza',24661),
+(6,'Colima',28522),
+(7,'Chiapas',16038),
+(8,'Chihuahua',29090),
+(9,'Ciudad de México',52723),
+(10,'Durango',18230),
+(11,'Guanajuato',26620),
+(12,'Guerrero',23989),
+(13,'Hidalgo',26894),
+(14,'Jalisco',31731),
+(15,'México',51881),
+(16,'Michoacán de Ocampo',19688),
+(17,'Morelos',36278),
+(18,'Nayarit',23607),
+(19,'Nuevo León',28171),
+(20,'Oaxaca',18575),
+(21,'Puebla',38642),
+(22,'Querétaro',40755),
+(23,'Quintana Roo',30294),
+(24,'San Luis Potosí',31764),
+(25,'Sinaloa',29984),
+(26,'Sonora',37613),
+(27,'Tabasco',38004),
+(28,'Tamaulipas',25129),
+(29,'Tlaxcala',28576),
+(30,'Veracruz de Ignacio de la Llave',20272),
+(31,'Yucatán',24952),
+(32,'Zacatecas',27007);
+
+-- Tabla: PrevalenciaDelictiva
+CREATE TABLE PrevalenciaDelictiva (
+    id INT AUTO_INCREMENT PRIMARY KEY,
+    entidad VARCHAR(100) NOT NULL,
+    tasa_2023 INT NOT NULL
+);
+
+INSERT INTO PrevalenciaDelictiva (id, entidad, tasa_2023) VALUES
+(1,'Aguascalientes',32798),
+(2,'Baja California',23796),
+(3,'Baja California Sur',21621),
+(4,'Campeche',22560),
+(5,'Coahuila de Zaragoza',19371),
+(6,'Colima',21206),
+(7,'Chiapas',14139),
+(8,'Chihuahua',22565),
+(9,'Ciudad de México',32497),
+(10,'Durango',16375),
+(11,'Guanajuato',19420),
+(12,'Guerrero',15602),
+(13,'Hidalgo',21164),
+(14,'Jalisco',24793),
+(15,'México',32971),
+(16,'Michoacán de Ocampo',14993),
+(17,'Morelos',25820),
+(18,'Nayarit',17382),
+(19,'Nuevo León',22498),
+(20,'Oaxaca',13274),
+(21,'Puebla',25196),
+(22,'Querétaro',27735),
+(23,'Quintana Roo',22190),
+(24,'San Luis Potosí',23591),
+(25,'Sinaloa',20839),
+(26,'Sonora',26298),
+(27,'Tabasco',25688),
+(28,'Tamaulipas',18104),
+(29,'Tlaxcala',23025),
+(30,'Veracruz de Ignacio de la Llave',15487),
+(31,'Yucatán',19167),
+(32,'Zacatecas',16422);
+
+-- Tabla: PrevalenciaDelictivaHombres
+CREATE TABLE PrevalenciaDelictivaHombres (
+    id INT AUTO_INCREMENT PRIMARY KEY,
+    entidad VARCHAR(100) NOT NULL,
+    tasa_2023 INT NOT NULL
+);
+
+INSERT INTO PrevalenciaDelictivaHombres (id, entidad, tasa_2023) VALUES
+(1,'Aguascalientes',33711),
+(2,'Baja California',23043),
+(3,'Baja California Sur',19330),
+(4,'Campeche',21833),
+(5,'Coahuila de Zaragoza',18180),
+(6,'Colima',21107),
+(7,'Chiapas',16603),
+(8,'Chihuahua',22303),
+(9,'Ciudad de México',34563),
+(10,'Durango',15241),
+(11,'Guanajuato',20057),
+(12,'Guerrero',16982),
+(13,'Hidalgo',22398),
+(14,'Jalisco',24390),
+(15,'México',32907),
+(16,'Michoacán de Ocampo',14405),
+(17,'Morelos',26995),
+(18,'Nayarit',16076),
+(19,'Nuevo León',23602),
+(20,'Oaxaca',12941),
+(21,'Puebla',26520),
+(22,'Querétaro',30298),
+(23,'Quintana Roo',22592),
+(24,'San Luis Potosí',24019),
+(25,'Sinaloa',21181),
+(26,'Sonora',26865),
+(27,'Tabasco',25882),
+(28,'Tamaulipas',17788),
+(29,'Tlaxcala',23968),
+(30,'Veracruz de Ignacio de la Llave',16365),
+(31,'Yucatán',20678),
+(32,'Zacatecas',17328);
+
+-- Tabla: PrevalenciaDelictivaMujeres
+CREATE TABLE PrevalenciaDelictivaMujeres (
+    id INT AUTO_INCREMENT PRIMARY KEY,
+    entidad VARCHAR(100) NOT NULL,
+    tasa_2023 INT NOT NULL
+);
+
+INSERT INTO PrevalenciaDelictivaMujeres (id, entidad, tasa_2023) VALUES
+(1,'Aguascalientes',32042),
+(2,'Baja California',24481),
+(3,'Baja California Sur',23818),
+(4,'Campeche',23214),
+(5,'Coahuila de Zaragoza',20447),
+(6,'Colima',21295),
+(7,'Chiapas',12074),
+(8,'Chihuahua',22804),
+(9,'Ciudad de México',30747),
+(10,'Durango',17401),
+(11,'Guanajuato',18930),
+(12,'Guerrero',14572),
+(13,'Hidalgo',20215),
+(14,'Jalisco',25142),
+(15,'México',33024),
+(16,'Michoacán de Ocampo',15485),
+(17,'Morelos',24870),
+(18,'Nayarit',18640),
+(19,'Nuevo León',21441),
+(20,'Oaxaca',13549),
+(21,'Puebla',24176),
+(22,'Querétaro',25746),
+(23,'Quintana Roo',21776),
+(24,'San Luis Potosí',23228),
+(25,'Sinaloa',20562),
+(26,'Sonora',25742),
+(27,'Tabasco',25522),
+(28,'Tamaulipas',18369),
+(29,'Tlaxcala',22296),
+(30,'Veracruz de Ignacio de la Llave',14712),
+(31,'Yucatán',17806),
+(32,'Zacatecas',15690);
